@@ -1,298 +1,613 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DANA-BOZZ | ADMIN MASTER</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg-dark: #000000;
-      --card-bg: #111111;
-      --primary-gold: #f39c12;
-      --text-white: #ffffff;
-      --text-gray: #a0a0a0;
-      --green: #2ecc71;
-      --red: #e74c3c;
-      --blue: #3498db;
-    }
-
-    body { 
-      font-family: 'Inter', sans-serif; 
-      background-color: var(--bg-dark); 
-      color: var(--text-white); 
-      margin: 0; padding: 15px; 
-    }
-    .container { max-width: 900px; margin: 0 auto; }
-    
-    header { 
-      margin-bottom: 25px; 
-      border-bottom: 1px solid #222; 
-      padding-bottom: 15px; 
-      display: flex; 
-      justify-content: space-between; 
-      align-items: center; 
-    }
-    h1 { color: var(--primary-gold); margin: 0; font-size: 22px; font-weight: 800; }
-    .refresh-btn { 
-      background: #222; color: white; border: 1px solid #333; 
-      padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 11px; 
-    }
-
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
-    .card-stat { 
-      background: var(--card-bg); padding: 20px; border-radius: 12px; 
-      border: 1px solid #222;
-    }
-    .card-stat.pemasukan-hari { border-bottom: 4px solid var(--green); }
-    .card-stat.pemasukan-bulan { border-bottom: 4px solid var(--blue); }
-    .card-stat.total-deposit { border-bottom: 4px solid var(--primary-gold); }
-    
-    .stat-label { font-size: 10px; text-transform: uppercase; color: var(--text-gray); letter-spacing: 1px; font-weight: 600; }
-    .stat-value { font-size: 22px; font-weight: 700; margin-top: 5px; color: var(--text-white); }
-
-    .bento-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-    .card { background: var(--card-bg); padding: 25px; border-radius: 16px; border: 1px solid #222; }
-    h3 { margin-top: 0; font-size: 16px; margin-bottom: 15px; font-weight: 700; }
-    label { display: block; margin-bottom: 8px; color: var(--text-gray); font-size: 11px; text-transform: uppercase; font-weight: 600; }
-
-    input { 
-      background: #000; border: 1px solid #333; color: white; padding: 14px; 
-      border-radius: 10px; width: 100%; outline: none; margin-bottom: 12px; box-sizing: border-box;
-    }
-    input:focus { border-color: var(--primary-gold); }
-
-    button.btn-action { 
-      color: white; border: none; padding: 14px; border-radius: 10px; 
-      cursor: pointer; font-weight: 700; width: 100%; transition: 0.3s;
-    }
-    .btn-topup { background: var(--green); }
-    .btn-potong { background: var(--red); }
-    button:disabled { opacity: 0.5; }
-
-    .table-container { 
-      margin-top: 25px; 
-      overflow-x: auto; 
-      max-height: 500px; 
-      overflow-y: auto; 
-      border-radius: 16px;
-      border: 1px solid #222;
-      background: rgba(255, 255, 255, 0.02); 
-      scrollbar-width: thin; 
-      scrollbar-color: var(--primary-gold) #111;
-    }
-
-    .table-container::-webkit-scrollbar { width: 6px; height: 6px; }
-    .table-container::-webkit-scrollbar-track { background: #111; }
-    .table-container::-webkit-scrollbar-thumb { background: var(--primary-gold); border-radius: 10px; }
-
-    table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 600px; }
-    
-    th { 
-      position: sticky; top: 0; 
-      background: #1a1a1a; 
-      text-align: left; padding: 15px; 
-      color: var(--text-gray); 
-      border-bottom: 2px solid #333; 
-      font-size: 10px; 
-      text-transform: uppercase; 
-      z-index: 10;
-    }
-
-    td { 
-      padding: 15px; 
-      border-bottom: 1px solid #111; 
-      vertical-align: middle;
-    }
-
-    tr:nth-child(even) { background: rgba(255, 255, 255, 0.01); }
-    tr:hover { background: rgba(243, 156, 18, 0.05); } 
-    
-    .badge { padding: 4px 8px; border-radius: 4px; font-size: 9px; font-weight: 700; }
-    .badge-topup { background: rgba(46, 204, 113, 0.1); color: #2ecc71; border: 1px solid #2ecc71; }
-    .badge-potong { background: rgba(231, 76, 60, 0.1); color: #e74c3c; border: 1px solid #e74c3c; }
-
-    .status-msg { margin-top: 15px; font-size: 13px; padding: 12px; border-radius: 8px; display: none; text-align: center; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Iuran Komunitas - Target Lebaran 2027</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts (Inter) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+    </style>
 </head>
-<body>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col justify-between">
 
-<div class="container">
-  <header>
-    <h1>DANA-BOZZ <span style="font-weight: 400; color: #555; font-size: 14px;">| ADMIN MASTER</span></h1>
-    <button class="refresh-btn" onclick="loadStats()">🔄 Refresh Data</button>
-  </header>
+    <!-- Header & Navigation -->
+    <header class="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-30 shadow-md">
+        <div class="max-w-6xl mx-auto px-3 sm:px-6 lg:px-8 py-2.5 flex justify-between items-center">
+            <div class="flex items-center gap-2.5">
+                <div class="p-1.5 bg-teal-500/10 border border-teal-500/20 rounded-lg text-teal-400">
+                    <i data-lucide="sparkles" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-base leading-tight sm:text-lg text-white">PLALANGAN_GENERATION</h1>
+                    <p class="text-[11px] text-slate-400 flex items-center gap-1">
+                        Target Idulfitri 2027
+                        <span id="sync-status" class="inline-block w-2 h-2 rounded-full bg-amber-400" title="Menghubungkan..."></span>
+                    </p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2">
+                <button onclick="openModalRegister()" title="Daftar Anggota Baru" class="inline-flex items-center gap-1 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all">
+                    <i data-lucide="user-plus" class="w-3.5 h-3.5"></i>
+                    <span class="hidden sm:inline">Daftar Anggota</span>
+                </button>
+                <button onclick="fetchDataFromSheets()" title="Refresh Data" class="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs transition-colors border border-slate-700">
+                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                </button>
+                <button onclick="openModalSetor()" class="inline-flex items-center gap-1.5 bg-teal-600 hover:bg-teal-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition-all shadow-md active:scale-95">
+                    <i data-lucide="lock" class="w-3.5 h-3.5 text-teal-200"></i>
+                    <span>Catat Setoran</span>
+                </button>
+            </div>
+        </div>
+    </header>
 
-  <div class="stats-grid">
-    <div class="card-stat pemasukan-hari">
-      <div class="stat-label">Pemasukan Hari Ini (Net)</div>
-      <div class="stat-value" id="statHariIni">Rp 0</div>
+    <!-- Main Container -->
+    <main class="max-w-6xl mx-auto px-3 sm:px-6 lg:px-8 py-3 w-full flex-grow space-y-3">
+
+        <!-- Banner Info Slim -->
+        <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-teal-950 text-white rounded-xl p-3.5 sm:p-4 shadow-lg border border-slate-800 relative overflow-hidden space-y-2.5">
+            <div class="absolute -right-10 -bottom-10 w-32 h-32 bg-teal-500/10 rounded-full blur-2xl pointer-events-none"></div>
+            
+            <div class="flex justify-between items-center gap-2">
+                <div>
+                    <span class="text-[10px] font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1">
+                        <i data-lucide="piggy-bank" class="w-3 h-3 text-teal-400"></i> Total Terkumpul
+                    </span>
+                    <div class="text-xl sm:text-2xl font-extrabold text-white tracking-tight leading-tight" id="stat-total-terkumpul">Rp 0</div>
+                    <p class="text-[10px] text-slate-400 mt-0.5">Sisa: <span id="stat-sisa-target" class="font-semibold text-slate-200">Rp 0</span></p>
+                </div>
+
+                <div class="text-right">
+                    <span class="text-[10px] font-semibold uppercase tracking-wider text-slate-400 flex items-center justify-end gap-1">
+                        <i data-lucide="" class="w-3 h-3 text-amber-400"></i> Batas Waktu
+                    </span>
+                    <div class="text-base sm:text-lg font-bold text-amber-300 flex items-center justify-end gap-1 leading-tight" id="stat-countdown">
+                        -- Hari Lagi
+                    </div>
+                    <p class="text-[10px] text-slate-400 mt-0.5">Target: <span id="stat-deadline-date" class="font-medium text-slate-300">28 Feb 2027</span></p>
+                </div>
+            </div>
+
+            <div class="pt-1.5 border-t border-slate-800/80 space-y-1">
+                <div class="flex justify-between items-center text-[11px] font-medium">
+                    <span class="text-slate-400">Pencapaian Target</span>
+                    <span id="stat-progress-percent" class="text-teal-400 font-bold">0%</span>
+                </div>
+                <div class="w-full bg-slate-700/60 rounded-full h-1.5 overflow-hidden border border-slate-600/30">
+                    <div id="stat-progress-bar" class="bg-gradient-to-r from-teal-500 to-emerald-400 h-full rounded-full transition-all duration-700 ease-out" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rekening Card -->
+        <div class="bg-white rounded-xl border border-slate-200 p-3 shadow-sm hover:shadow-md transition-shadow">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2.5">
+                <div class="flex items-start gap-2">
+                    <div class="p-1.5 bg-blue-50 text-blue-600 rounded-lg font-bold text-xs shrink-0">
+                        <i data-lucide="credit-card" class="w-4 h-4"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-slate-800 text-xs sm:text-sm">Iuran Bertahap / DI cicil Melalui Tranfer/Tunai</h3>
+                        <p class="text-[10px] sm:text-[11px] text-slate-500">.</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between gap-2 bg-slate-50 p-1.5 px-2.5 rounded-lg border border-slate-200/80 shrink-0">
+                    <div class="text-[10px] sm:text-[11px]">
+                        <span class="font-bold text-slate-700 block">DANA / OVO / SHOPEPAY</span>
+                        <span class="font-mono text-slate-900 text-xs font-medium tracking-wide" id="no-">081936999919</span>
+                        <span class="text-slate-500 text-[10px] block">---------</span>
+                    </div>
+                    <button onclick="copyRekening()" class="inline-flex items-center gap-1 bg-slate-200 hover:bg-slate-300 text-slate-700 px-2 py-1 rounded text-xs font-medium transition-colors">
+                        <i data-lucide="copy" class="w-3 h-3"></i>
+                        <span id="btn-copy-text">Salin</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls Section -->
+        <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-2">
+            <div class="relative flex-grow max-w-md">
+                <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+                <input type="text" id="input-search" oninput="renderTable()" placeholder="Cari nama anggota..." class="w-full pl-8 pr-3 py-1.5 text-xs bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all shadow-sm">
+            </div>
+
+            <div class="flex items-center gap-2">
+                <div class="relative w-full sm:w-auto">
+                    <select id="select-filter" onchange="renderTable()" class="w-full appearance-none bg-white border border-slate-200 text-slate-700 py-1.5 pl-3 pr-7 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 shadow-sm">
+                        <option value="ALL">Semua Status</option>
+                        <option value="LUNAS">Status: Lunas</option>
+                        <option value="DICICIL">Status: Dicicil</option>
+                        <option value="BELUM">Status: Belum Bayar</option>
+                    </select>
+                    <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400 absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabel Ringkas -->
+        <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 text-[11px] font-semibold uppercase tracking-wider">
+                            <th class="py-2.5 px-3 sm:px-4">Anggota</th>
+                            <th class="py-2.5 px-3">Target</th>
+                            <th class="py-2.5 px-3">Terbayar</th>
+                            <th class="py-2.5 px-3">Sisa </th>
+                            <th class="py-2.5 px-3 text-center">Status</th>
+                            <th class="py-2.5 px-3 sm:px-4 text-right">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body" class="divide-y divide-slate-100 text-xs">
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="empty-state" class="hidden p-6 text-center text-slate-500 text-xs">
+                <i data-lucide="user-x" class="w-8 h-8 mx-auto text-slate-300 mb-1"></i>
+                <p class="font-medium">Belum ada anggota terdaftar.</p>
+                <p class="text-[11px] text-slate-400 mt-0.5">Jadilah yang pertama mendaftar via tombol di atas!</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-2.5 mt-4">
+        <div class="max-w-6xl mx-auto px-4 text-center text-[10px] sm:text-[11px] text-slate-500">
+            <p>© 2026 Panitia Malam Takbiran 2027. Transparansi Keuangan Bersama.</p>
+        </div>
+    </footer>
+
+    <!-- MODAL PORTAL PENDAFTARAN ANGGOTA BARU (WELCOME PORTAL) -->
+    <div id="modal-register" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full overflow-hidden border border-slate-100 animate-in fade-in zoom-in duration-200">
+            <div class="bg-gradient-to-r from-teal-700 to-slate-900 text-white p-5 text-center relative">
+                <div class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-2 border border-white/20">
+                    <i data-lucide="sparkles" class="w-6 h-6 text-teal-300"></i>
+                </div>
+                <h3 class="font-bold text-base">Gabung Iuran Takbiran 2027</h3>
+                <p class="text-xs text-teal-100 mt-1">Daftarkan namamu untuk berpartisipasi meramaikan Malam Takbiran!</p>
+            </div>
+
+            <form id="form-register" onsubmit="handleFormRegister(event)" class="p-5 space-y-3.5">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Nama Lengkap / Panggilan</label>
+                    <input type="text" id="reg-nama" required placeholder="Contoh: Ahmad Subagja" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Komitmen Target/Besar Iuran (Rp)</label>
+                    <input type="number" id="reg-target" min="10000" step="5000" value="100000" required placeholder="100000" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500">
+                    <span class="text-[10px] text-slate-700 block mt-1">*Nominal standar iuran Rp 50.000 / 100.000 ( bisa dicicil ).</span>
+                </div>
+
+                <div class="pt-2 space-y-2">
+                    <button type="submit" id="btn-submit-register" class="w-full py-2.5 bg-teal-600 hover:bg-teal-500 text-white rounded-xl font-bold text-xs shadow-lg shadow-teal-900/20 transition-all flex justify-center items-center gap-2">
+                        <span>Daftar Sekarang</span>
+                    </button>
+                    <button type="button" onclick="closeModalRegister()" class="w-full py-1.5 text-slate-400 hover:text-slate-600 font-medium text-[11px] transition-colors">
+                        Hanya ingin Melihat / Klik Disini
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
-    <div class="card-stat pemasukan-bulan">
-      <div class="stat-label">Pemasukan Bulan Ini</div>
-      <div class="stat-value" id="statBulanIni">Rp 0</div>
+
+    <!-- MODAL 1: Form Setor Dana (Bendahara) -->
+    <div id="modal-setor" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden">
+            <div class="bg-slate-900 text-white p-4 px-6 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="shield-check" class="w-5 h-5 text-teal-400"></i>
+                    <h3 class="font-bold text-base">Tambah Setoran Dana</h3>
+                </div>
+                <button onclick="closeModalSetor()" class="text-slate-400 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <form id="form-setor" onsubmit="handleFormSetor(event)" class="p-5 space-y-3.5">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Pilih Anggota</label>
+                    <select id="setor-anggota-id" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500">
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Nominal Setoran (Rp)</label>
+                    <input type="number" id="setor-nominal" min="1000" step="1000" required placeholder="Contoh: 25000" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Tanggal Transfer</label>
+                    <input type="date" id="setor-tanggal" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Metode / Bank</label>
+                    <select id="setor-metode" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+                        <option value="Transfer Bank Jago">Transfer Bank Jago</option>
+                        <option value="Transfer BCA">Transfer BCA</option>
+                        <option value="e-Wallet">e-Wallet (Dana/OVO/Gopay)</option>
+                        <option value="Tunai / Cash">Tunai / Cash</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Catatan</label>
+                    <input type="text" id="setor-catatan" placeholder="Contoh: Cicilan 1" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs">
+                </div>
+
+                <div class="pt-2 border-t border-slate-100">
+                    <label class="block text-xs font-bold text-rose-600 uppercase mb-1">PIN Otorisasi Bendahara</label>
+                    <input type="password" id="setor-pin" maxlength="6" required placeholder="MASUKAN PIN" class="w-full bg-rose-50/50 border border-rose-200 rounded-xl px-3 py-2 text-xs text-center font-mono">
+                </div>
+
+                <div class="pt-2 flex gap-3">
+                    <button type="button" onclick="closeModalSetor()" class="w-1/2 py-2 bg-slate-100 text-slate-700 rounded-xl font-semibold text-xs">Batal</button>
+                    <button type="submit" id="btn-submit-setor" class="w-1/2 py-2 bg-teal-600 text-white rounded-xl font-semibold text-xs">Simpan Setoran</button>
+                </div>
+            </form>
+        </div>
     </div>
-    <div class="card-stat total-deposit">
-      <div class="stat-label">Total Saldo Member (Titipan)</div>
-      <div class="stat-value" id="statDeposit" style="color: var(--primary-gold);">Rp 0</div>
+
+    <!-- MODAL 2: Detail Riwayat -->
+    <div id="modal-detail" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="bg-slate-900 text-white p-4 flex justify-between items-start shrink-0">
+                <div>
+                    <span class="text-[11px] text-teal-400 font-medium">Riwayat Transaksi Anggota</span>
+                    <h3 id="detail-nama-anggota" class="font-bold text-base text-white">--</h3>
+                </div>
+                <button onclick="closeModalDetail()" class="text-slate-400 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="p-3 bg-slate-50 border-b border-slate-200 grid grid-cols-3 gap-2 text-center shrink-0">
+                <div class="bg-white p-2 rounded-xl border border-slate-200/60">
+                    <span class="text-[10px] text-slate-400 block font-medium">Target</span>
+                    <span id="detail-target" class="text-xs font-bold text-slate-800">Rp 100.000</span>
+                </div>
+                <div class="bg-white p-2 rounded-xl border border-slate-200/60">
+                    <span class="text-[10px] text-slate-400 block font-medium">Terbayar</span>
+                    <span id="detail-terbayar" class="text-xs font-bold text-emerald-600">Rp 0</span>
+                </div>
+                <div class="bg-white p-2 rounded-xl border border-slate-200/60">
+                    <span class="text-[10px] text-slate-400 block font-medium">Sisa</span>
+                    <span id="detail-sisa" class="text-xs font-bold text-amber-600">Rp 0</span>
+                </div>
+            </div>
+
+            <div class="p-4 overflow-y-auto space-y-2 flex-grow" id="detail-history-list"></div>
+
+            <div class="p-3 bg-slate-50 border-t border-slate-200 flex justify-between items-center shrink-0">
+                <button id="btn-quick-setor" onclick="" class="inline-flex items-center gap-1.5 text-xs font-semibold text-teal-700 bg-teal-50 px-3 py-1.5 rounded-lg border border-teal-200">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Setor Untuk Anggota Ini
+                </button>
+                <button onclick="closeModalDetail()" class="px-3 py-1.5 bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg">Tutup</button>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <div class="bento-grid">
-    <div class="card">
-      <h3 style="color: var(--green);">➕ Top Up / Deposit</h3>
-      <label>Tambah saldo titipan member</label>
-      <input type="text" id="topupId" placeholder="ID Member (IDMxxx)">
-      <input type="number" id="topupNominal" placeholder="Nominal Rp">
-      <button id="btnTopUp" class="btn-action btn-topup" onclick="kirimData('TOPUP')">PROSES DEPOSIT</button>
-      <div id="msgTopUp" class="status-msg"></div>
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-slate-900 text-white px-4 py-2.5 rounded-xl shadow-2xl border border-slate-800 flex items-center gap-2.5 translate-y-20 opacity-0 transition-all duration-300 z-50">
+        <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
+        <span id="toast-message" class="text-xs font-medium">Pesan pemberitahuan...</span>
     </div>
 
-    <div class="card">
-      <h3 style="color: var(--red);">➖ Potong / Bayar Wifi</h3>
-      <label>Penagihan manual atau bayar tunai</label>
-      <input type="text" id="potongId" placeholder="ID Member">
-      <input type="number" id="potongNominal" placeholder="Nominal Rp">
-      <input type="text" id="potongKet" placeholder="Keterangan (Bayar Wifi/Denda)">
-      <button id="btnPotong" class="btn-action btn-potong" onclick="kirimData('POTONG')">EKSEKUSI PEMBAYARAN</button>
-      <div id="msgPotong" class="status-msg"></div>
-    </div>
-  </div>
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyuMn7qHcsnTEUN4jDIywJvf7XmqL-nbvqJFgn927lWBjn6xMH9Lzk500--wpW9rwvnuQ/exec";
+        const PIN_BENDAHARA = "123456";
 
-  <div class="card" style="margin-top: 25px;">
-    <h3 style="color: var(--primary-gold);">📜 Riwayat Transaksi Terbaru (Global)</h3>
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th>WAKTU</th>
-            <th>ID</th>
-            <th>NAMA MEMBER</th> 
-            <th>TIPE</th>
-            <th>NOMINAL</th>
-            <th>KETERANGAN</th>
-          </tr>
-        </thead>
-        <tbody id="logTableBody">
-          <tr><td colspan="6" style="text-align:center; padding:20px; color:#444;">Memuat riwayat...</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
+        const TARGET_INDIVIDU = 100000;
+        const TARGET_GLOBAL = 2000000; 
+        const deadlineDate = new Date(2027, 1, 28);
 
-<script>
-  // PASTIKAN URL WEB APP SESUAI DENGAN DEPLOYMENT GS TERBARU ANDA
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyCxRuXQiiqS1fnnH2ml9QX1pqquYNc-rFHyyxAeemaaa-cIQT7i56NRTE4EfnraQ9zSQ/exec";
+        let membersData = [];
 
-  window.onload = loadStats;
+        window.onload = function() {
+            initCountdown();
+            lucide.createIcons();
+            document.getElementById('setor-tanggal').value = new Date().toISOString().split('T')[0];
+            fetchDataFromSheets();
 
-  // SISIPAN: Fungsi pembaca format waktu ISO dunia ke waktu lokal Indonesia
-  function formatWaktuLokal(waktuMentah) {
-    if (!waktuMentah) return "-";
-    if (typeof waktuMentah === 'string' && waktuMentah.includes('T')) {
-      try {
-        const d = new Date(waktuMentah);
-        if (!isNaN(d.getTime())) {
-          const tgl = String(d.getDate()).padStart(2, '0');
-          const bln = String(d.getMonth() + 1).padStart(2, '0');
-          const thn = d.getFullYear();
-          const jam = String(d.getHours()).padStart(2, '0');
-          const mnt = String(d.getMinutes()).padStart(2, '0');
-          return `${tgl}/${bln}/${thn} ${jam}:${mnt}`;
+            // Cek apakah pengguna baru pertama kali buka (Pop-up Portal Pendaftaran)
+            if (!localStorage.getItem('has_visited_takbiran')) {
+                openModalRegister();
+            }
+        };
+
+        // AMBIL DATA DARI GS
+        async function fetchDataFromSheets() {
+            setSyncStatus('loading');
+            try {
+                const response = await fetch(SCRIPT_URL);
+                const data = await response.json();
+                
+                if (data.members && Array.isArray(data.members)) {
+                    membersData = data.members.map(m => ({
+                        id: Number(m.id),
+                        nama: m.nama,
+                        history: []
+                    }));
+                }
+
+                if (data.logs && Array.isArray(data.logs)) {
+                    data.logs.forEach(log => {
+                        const mId = Number(log.memberId);
+                        const member = membersData.find(m => m.id === mId || m.nama.toLowerCase() === (log.nama || '').toLowerCase());
+                        if (member) {
+                            member.history.push({
+                                tanggal: log.timestamp ? log.timestamp.split('T')[0] : new Date().toISOString().split('T')[0],
+                                nominal: Number(log.nominal || 0),
+                                metode: log.metode || 'Transfer',
+                                catatan: log.catatan || ''
+                            });
+                        }
+                    });
+                }
+                
+                updateDashboardOverview();
+                renderTable();
+                setSyncStatus('online');
+            } catch (error) {
+                console.error("Gagal memuat data dari Google Sheets:", error);
+                setSyncStatus('offline');
+            }
         }
-      } catch (e) { }
-    }
-    return waktuMentah;
-  }
 
-  async function loadStats() {
-    try {
-      const response = await fetch(`${WEB_APP_URL}?action=GET_STATS`);
-      const res = await response.json();
-      if (res.success) {
-        document.getElementById('statHariIni').innerText = "Rp " + res.totalHariIni.toLocaleString('id-ID');
-        document.getElementById('statBulanIni').innerText = "Rp " + res.totalBulanIni.toLocaleString('id-ID');
-        document.getElementById('statDeposit').innerText = "Rp " + res.totalDeposit.toLocaleString('id-ID');
-        
-        const tableBody = document.getElementById('logTableBody');
-        tableBody.innerHTML = '';
-        
-        // SINKRONISASI: Menggunakan 'res.logs' sesuai output dari kode GS baru
-        if (res.logs && res.logs.length > 0) {
-          res.logs.forEach(log => {
-            // SISIPAN: Waktu yang lewat diproses dulu ke fungsi lokal
-            const tglTampil = formatWaktuLokal(log.tgl);
+        // KIRIM PENDAFTARAN ANGGOTA BARU
+        async function handleFormRegister(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-submit-register');
+            btn.disabled = true;
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i> <span>Mendaftarkan...</span>`;
+            lucide.createIcons();
 
-            const row = `
-              <tr>
-                <td style="color: #666;">${tglTampil}</td>
-                <td style="font-weight: 700; color: var(--blue);">${log.idMember}</td>
-                <td style="font-weight: 600; color: #fff;">${log.nama || '-'}</td>
-                <td><span class="badge ${log.tipe === 'TOPUP' ? 'badge-topup' : 'badge-potong'}">${log.tipe}</span></td>
-                <td style="font-weight: 600; color: ${log.tipe === 'TOPUP' ? '#2ecc71' : '#e74c3c'}">
-                  ${log.tipe === 'TOPUP' ? '+' : '-'} Rp ${log.nominal.toLocaleString('id-ID')}
-                </td>
-                <td style="color: #bbbbbb;">${log.ket}</td>
-              </tr>
-            `;
-            tableBody.innerHTML += row;
-          });
-        } else {
-          tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px; color:#666;">Belum ada riwayat transaksi global</td></tr>';
+            const nama = document.getElementById('reg-nama').value.trim();
+            const targetNominal = Number(document.getElementById('reg-target').value);
+
+            try {
+                await fetch(SCRIPT_URL, {
+                    method: "POST",
+                    mode: "no-cors",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        action: "register_member",
+                        nama: nama,
+                        targetNominal: targetNominal
+                    })
+                });
+
+                localStorage.setItem('has_visited_takbiran', 'true');
+                closeModalRegister();
+                showToast(`Selamat datang ${nama}! Pendaftaran berhasil.`);
+                
+                setTimeout(fetchDataFromSheets, 1500);
+            } catch (error) {
+                alert("Gagal mendaftar, coba lagi.");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<span>Daftar Sekarang</span>`;
+            }
         }
-      }
-    } catch (e) { 
-      console.error("Gagal memuat data stats."); 
-      document.getElementById('logTableBody').innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px; color:var(--red);">Gagal mengambil data dari server.</td></tr>';
-    }
-  }
 
-  async function kirimData(tipe) {
-    const id = tipe === 'TOPUP' ? document.getElementById('topupId').value : document.getElementById('potongId').value;
-    const nominal = tipe === 'TOPUP' ? document.getElementById('topupNominal').value : document.getElementById('potongNominal').value;
-    const ket = tipe === 'TOPUP' ? 'Deposit Admin' : document.getElementById('potongKet').value;
-    const msgBox = tipe === 'TOPUP' ? document.getElementById('msgTopUp') : document.getElementById('msgPotong');
-    const btn = tipe === 'TOPUP' ? document.getElementById('btnTopUp') : document.getElementById('btnPotong');
-
-    if (!id || !nominal) return alert("Lengkapi data transaksi!");
-
-    btn.disabled = true;
-    msgBox.style.display = 'block';
-    msgBox.style.backgroundColor = '#222';
-    msgBox.innerHTML = "⌛ Sedang memproses ke server...";
-
-    try {
-      await fetch(WEB_APP_URL, {
-        method: "POST",
-        mode: "no-cors",
-        body: JSON.stringify({ action: tipe, idMember: id, nominal: parseInt(nominal), keterangan: ket })
-      });
-
-      msgBox.innerHTML = "✅ Berhasil Diperbarui!";
-      msgBox.style.backgroundColor = tipe === 'TOPUP' ? '#064e3b' : '#7f1d1d';
-      
-      setTimeout(() => {
-        if(tipe === 'TOPUP') { 
-          document.getElementById('topupId').value = "";
-          document.getElementById('topupNominal').value = ""; 
-        } else { 
-          document.getElementById('potongId').value = "";
-          document.getElementById('potongNominal').value = ""; 
-          document.getElementById('potongKet').value = ""; 
+        function openModalRegister() {
+            document.getElementById('modal-register').classList.remove('hidden');
         }
-        msgBox.style.display = 'none';
-        loadStats();
-      }, 2000);
 
-    } catch (e) {
-      msgBox.innerHTML = "❌ Gagal koneksi ke server.";
-      msgBox.style.backgroundColor = "#ff4444";
-    } finally {
-      btn.disabled = false;
-    }
-  }
-</script>
+        function closeModalRegister() {
+            localStorage.setItem('has_visited_takbiran', 'true');
+            document.getElementById('modal-register').classList.add('hidden');
+        }
 
+        // KIRIM SETORAN (BENDAHARA)
+        async function saveSetoranToSheets(memberId, nama, nominal, tanggal, metode, catatan) {
+            const btnSubmit = document.getElementById('btn-submit-setor');
+            btnSubmit.disabled = true;
+
+            try {
+                await fetch(SCRIPT_URL, {
+                    method: "POST",
+                    mode: "no-cors",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ action: "add_setoran", memberId, nama, nominal, metode, catatan })
+                });
+
+                closeModalSetor();
+                showToast(`Berhasil menyimpan setoran ${formatRupiah(nominal)}!`);
+                setTimeout(fetchDataFromSheets, 1500);
+            } catch (error) {
+                alert("Gagal menyimpan setoran.");
+            } finally {
+                btnSubmit.disabled = false;
+            }
+        }
+
+        function setSyncStatus(status) {
+            const el = document.getElementById('sync-status');
+            el.className = status === 'online' ? 'inline-block w-2 h-2 rounded-full bg-emerald-400' : (status === 'loading' ? 'inline-block w-2 h-2 rounded-full bg-amber-400 animate-pulse' : 'inline-block w-2 h-2 rounded-full bg-rose-500');
+        }
+
+        function updateDashboardOverview() {
+            let totalTerkumpul = 0;
+            membersData.forEach(m => {
+                totalTerkumpul += m.history.reduce((sum, h) => sum + Number(h.nominal), 0);
+            });
+
+            const sisaTarget = Math.max(0, TARGET_GLOBAL - totalTerkumpul);
+            const percentage = Math.min(100, Math.round((totalTerkumpul / TARGET_GLOBAL) * 100));
+
+            document.getElementById('stat-total-terkumpul').innerText = formatRupiah(totalTerkumpul);
+            document.getElementById('stat-sisa-target').innerText = formatRupiah(sisaTarget);
+            document.getElementById('stat-progress-percent').innerText = `${percentage}%`;
+            document.getElementById('stat-progress-bar').style.width = `${percentage}%`;
+        }
+
+        function initCountdown() {
+            const diffDays = Math.ceil((deadlineDate - new Date()) / (1000 * 60 * 60 * 24));
+            document.getElementById('stat-countdown').innerHTML = `<i data-lucide="clock" class="w-3.5 h-3.5 text-amber-400"></i> ${diffDays} Hari Lagi`;
+            document.getElementById('stat-deadline-date').innerText = deadlineDate.toLocaleDateString('id-ID', { year: 'numeric', month: 'short', day: 'numeric' });
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('table-body');
+            const searchKey = document.getElementById('input-search').value.toLowerCase().trim();
+            const filterStatus = document.getElementById('select-filter').value;
+            const emptyState = document.getElementById('empty-state');
+
+            tbody.innerHTML = '';
+            let visibleCount = 0;
+
+            membersData.forEach((m) => {
+                const totalTerbayar = m.history.reduce((sum, h) => sum + Number(h.nominal), 0);
+                const sisa = Math.max(0, TARGET_INDIVIDU - totalTerbayar);
+                
+                let status = totalTerbayar >= TARGET_INDIVIDU ? "LUNAS" : (totalTerbayar > 0 ? "DICICIL" : "BELUM");
+
+                if (m.nama.toLowerCase().includes(searchKey) && (filterStatus === 'ALL' || filterStatus === status)) {
+                    visibleCount++;
+                    const row = document.createElement('tr');
+                    row.className = 'hover:bg-slate-50/80 transition-colors';
+
+                    let badgeHTML = status === 'LUNAS' 
+                        ? `<span class="inline-flex items-center gap-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] px-2 py-0.5 rounded-full font-bold">Lunas</span>`
+                        : (status === 'DICICIL' 
+                            ? `<span class="inline-flex items-center gap-0.5 bg-amber-50 text-amber-700 border border-amber-200 text-[10px] px-2 py-0.5 rounded-full font-bold">Dicicil</span>`
+                            : `<span class="inline-flex items-center gap-0.5 bg-rose-50 text-rose-700 border border-rose-200 text-[10px] px-2 py-0.5 rounded-full font-bold">Belum</span>`);
+
+                    row.innerHTML = `
+                        <td class="py-2 px-3 sm:px-4">
+                            <div class="flex items-center gap-2">
+                                <div class="w-6 h-6 rounded-full bg-slate-100 text-slate-700 font-bold flex items-center justify-center text-[10px] border border-slate-200 shrink-0">
+                                    ${getInitials(m.nama)}
+                                </div>
+                                <span class="font-semibold text-slate-800 text-xs">${escapeHTML(m.nama)}</span>
+                            </div>
+                        </td>
+                        <td class="py-2 px-3 text-slate-500 font-medium">${formatRupiah(TARGET_INDIVIDU)}</td>
+                        <td class="py-2 px-3 font-semibold text-emerald-600">${formatRupiah(totalTerbayar)}</td>
+                        <td class="py-2 px-3 font-semibold ${sisa > 0 ? 'text-amber-600' : 'text-slate-400'}">${formatRupiah(sisa)}</td>
+                        <td class="py-2 px-3 text-center">${badgeHTML}</td>
+                        <td class="py-2 px-3 sm:px-4 text-right">
+                            <button onclick="openModalDetail(${m.id})" class="inline-flex items-center gap-1 bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 px-2 py-1 rounded text-[11px] font-semibold transition-all shadow-sm">
+                                <i data-lucide="receipt" class="w-3 h-3 text-teal-600"></i> Detail
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                }
+            });
+
+            emptyState.classList.toggle('hidden', visibleCount > 0);
+            lucide.createIcons();
+        }
+
+        function openModalSetor(preselectedId = null) {
+            const select = document.getElementById('setor-anggota-id');
+            select.innerHTML = '';
+            membersData.forEach(m => {
+                const opt = document.createElement('option');
+                opt.value = m.id;
+                opt.textContent = m.nama;
+                if (preselectedId && m.id === preselectedId) opt.selected = true;
+                select.appendChild(opt);
+            });
+            document.getElementById('modal-setor').classList.remove('hidden');
+        }
+
+        function closeModalSetor() {
+            document.getElementById('modal-setor').classList.add('hidden');
+            document.getElementById('form-setor').reset();
+        }
+
+        function handleFormSetor(e) {
+            e.preventDefault();
+            if (document.getElementById('setor-pin').value.trim() !== PIN_BENDAHARA) {
+                alert("PIN Otorisasi Salah!");
+                return;
+            }
+            const memberId = Number(document.getElementById('setor-anggota-id').value);
+            const member = membersData.find(m => m.id === memberId);
+            saveSetoranToSheets(
+                memberId,
+                member ? member.nama : '',
+                Number(document.getElementById('setor-nominal').value),
+                document.getElementById('setor-tanggal').value,
+                document.getElementById('setor-metode').value,
+                document.getElementById('setor-catatan').value.trim()
+            );
+        }
+
+        function openModalDetail(id) {
+            const member = membersData.find(m => m.id === id);
+            if (!member) return;
+
+            const totalTerbayar = member.history.reduce((sum, h) => sum + Number(h.nominal), 0);
+            document.getElementById('detail-nama-anggota').innerText = member.nama;
+            document.getElementById('detail-terbayar').innerText = formatRupiah(totalTerbayar);
+            document.getElementById('detail-sisa').innerText = formatRupiah(Math.max(0, TARGET_INDIVIDU - totalTerbayar));
+
+            const historyContainer = document.getElementById('detail-history-list');
+            historyContainer.innerHTML = member.history.length === 0 ? `<p class="text-xs text-center text-slate-400 py-4">Belum ada riwayat setoran.</p>` : '';
+
+            member.history.forEach(h => {
+                const item = document.createElement('div');
+                item.className = 'bg-slate-50 border p-2.5 rounded-lg flex justify-between items-center text-xs';
+                item.innerHTML = `<div><div class="font-bold text-slate-800">${formatRupiah(h.nominal)} (${h.metode})</div><div class="text-[10px] text-slate-400">${h.tanggal}</div></div>`;
+                historyContainer.appendChild(item);
+            });
+
+            document.getElementById('btn-quick-setor').onclick = function() {
+                closeModalDetail();
+                openModalSetor(member.id);
+            };
+
+            document.getElementById('modal-detail').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeModalDetail() { document.getElementById('modal-detail').classList.add('hidden'); }
+        function formatRupiah(a) { return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(a); }
+        function getInitials(n) { return n.split(' ').map(x => x[0]).slice(0, 2).join('').toUpperCase(); }
+        function escapeHTML(s) { return s.replace(/[&<>'"]/g, t => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[t] || t)); }
+        function copyRekening() {
+            const noRek = document.getElementById('no-rekening').innerText;
+            navigator.clipboard.writeText(noRek);
+            showToast('Nomor rekening disalin!');
+        }
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').innerText = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3000);
+        }
+    </script>
 </body>
 </html>
